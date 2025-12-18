@@ -38,14 +38,49 @@
             #print-area, #print-area * { visibility: visible; }
             #print-area { position: absolute; left: 0; top: 0; width: 100%; z-index: 1000; background: white; }
         }
-        .loader-dots div { animation-timing-function: cubic-bezier(0, 1, 1, 0); }
-        .loader-dots div:nth-child(1) { left: 8px; animation: loader-dots1 0.6s infinite; }
-        .loader-dots div:nth-child(2) { left: 8px; animation: loader-dots2 0.6s infinite; }
-        .loader-dots div:nth-child(3) { left: 32px; animation: loader-dots2 0.6s infinite; }
-        .loader-dots div:nth-child(4) { left: 56px; animation: loader-dots3 0.6s infinite; }
-        @keyframes loader-dots1 { 0% { transform: scale(0); } 100% { transform: scale(1); } }
-        @keyframes loader-dots3 { 0% { transform: scale(1); } 100% { transform: scale(0); } }
-        @keyframes loader-dots2 { 0% { transform: translate(0, 0); } 100% { transform: translate(24px, 0); } }
+        
+        /* --- LOADER CSS --- */
+        .loader {
+            width: 48px;
+            height: 48px;
+            display: inline-block;
+            position: relative;
+            border: 2px solid #FFF;
+            box-sizing: border-box;
+            animation: rotation 2s linear infinite;
+        }
+        .loader::after,
+        .loader::before {
+            content: '';  
+            box-sizing: border-box;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            border: 2px solid #FF3D00;
+            width: 38px;
+            height: 38px;
+            animation: rotationBack 1.5s linear infinite;
+            transform-origin: center center;
+        }
+        .loader::before {
+            width: 28px;
+            height: 28px;
+            border-color: #FFF;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        } 
+        @keyframes rotationBack {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased h-screen overflow-hidden flex flex-col">
@@ -67,7 +102,7 @@
                 <h1 class="text-4xl font-bold mb-4 tracking-wide">Audit System Pro</h1>
                 <p class="text-slate-300 text-lg max-w-md mx-auto leading-relaxed">ระบบบริหารจัดการและตรวจสอบมาตรฐานสาขาแบบครบวงจร</p>
                 <div class="mt-8 flex justify-center gap-2">
-                    <span class="px-3 py-1 bg-white/10 rounded-full text-xs border border-white/20">v3.4 UserFix</span>
+                    <span class="px-3 py-1 bg-white/10 rounded-full text-xs border border-white/20">v4.0 Production</span>
                     <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-xs border border-green-500/30">● Online</span>
                 </div>
             </div>
@@ -96,8 +131,10 @@
                     <button type="submit" class="w-full bg-primary hover:bg-indigo-700 text-white font-bold py-3.5 rounded-lg shadow-lg hover:shadow-indigo-500/30 transition transform active:scale-[0.98]">
                         เข้าสู่ระบบ
                     </button>
-                    <!-- Debug Button -->
-                    <button type="button" onclick="debugSystem()" class="w-full text-xs text-slate-400 hover:text-slate-600 underline text-center">ตรวจสอบการเชื่อมต่อ (Debug)</button>
+                    <!-- Version Display (Static) -->
+                    <div class="mt-6 text-center">
+                        <p class="text-xs text-slate-400 select-none">Version 4.0</p>
+                    </div>
                 </form>
             </div>
         </div>
@@ -150,8 +187,8 @@
                 </a>
             </nav>
             <div class="p-4 border-t border-slate-800 text-center">
-                <div class="text-[10px] text-slate-500 mb-2 font-mono">System v3.4</div>
-                <button onclick="logout()" class="w-full flex items-center justify-center gap-2 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white px-4 py-2 rounded-lg transition-all text-sm font-bold">
+                <div class="text-[10px] text-slate-500 mb-2 font-mono">System v4.0</div>
+                <button type="button" onclick="logout()" class="w-full flex items-center justify-center gap-2 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white px-4 py-2 rounded-lg transition-all text-sm font-bold">
                     <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ
                 </button>
             </div>
@@ -167,7 +204,7 @@
                 <div class="flex items-center gap-4">
                     <div class="hidden sm:flex items-center text-sm text-green-600 bg-green-50 px-3 py-1.5 rounded-full border border-green-200 shadow-sm"><i class="fa-solid fa-wifi mr-2 animate-pulse"></i><span id="connectionStatus">Online</span></div>
                     <div class="sm:hidden text-green-600 text-xs flex items-center gap-1"><i class="fa-solid fa-circle text-[8px]"></i> Online</div>
-                    <button onclick="logout()" class="md:hidden w-8 h-8 flex items-center justify-center rounded-full bg-red-50 text-red-500 active:bg-red-100 ml-2"><i class="fa-solid fa-right-from-bracket text-sm"></i></button>
+                    <button type="button" onclick="logout()" class="md:hidden w-8 h-8 flex items-center justify-center rounded-full bg-red-50 text-red-500 active:bg-red-100 ml-2"><i class="fa-solid fa-right-from-bracket text-sm"></i></button>
                 </div>
             </header>
 
@@ -273,7 +310,7 @@
         </div>
     </div>
     
-    <!-- Edit User Modal (ADDED) -->
+    <!-- Edit User Modal -->
     <div id="editUserModal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl animate-fade-in-up">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-t-2xl">
@@ -283,7 +320,6 @@
             <form onsubmit="handleEditUserSubmit(event)" class="p-6 space-y-4">
                 <div>
                     <label class="text-xs font-bold text-slate-500 uppercase">Username</label>
-                    <!-- ReadOnly เพื่อป้องกันชื่อหาย -->
                     <input type="text" id="editUsername" name="user" class="w-full mt-1 p-2.5 bg-slate-100 border border-slate-200 rounded-lg text-slate-500 outline-none cursor-not-allowed" readonly>
                 </div>
                 <div>
@@ -310,20 +346,21 @@
     </div>
 
     <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="hidden fixed inset-0 bg-white/90 z-[100] flex flex-col items-center justify-center backdrop-blur-sm transition-opacity duration-300">
-        <div class="loader-dots block relative w-20 h-5 mt-2"><div class="absolute top-0 w-3 h-3 rounded-full bg-primary"></div><div class="absolute top-0 w-3 h-3 rounded-full bg-primary"></div><div class="absolute top-0 w-3 h-3 rounded-full bg-primary"></div><div class="absolute top-0 w-3 h-3 rounded-full bg-primary"></div></div>
-        <p id="loadingText" class="font-bold text-slate-700 mt-4 text-lg animate-pulse">กำลังประมวลผล...</p>
+    <div id="loadingOverlay" class="hidden fixed inset-0 bg-black/50 z-[100] flex flex-col items-center justify-center transition-opacity duration-300">
+        <span class="loader"></span>
+        <p id="loadingText" class="font-bold text-white mt-4 text-lg animate-pulse shadow-black drop-shadow-md">กำลังประมวลผล...</p>
     </div>
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbwQ3PAtmKc46CNCwKGYrMsULKja6P08LFh_b96w37L0CUCs9YSwMei6iiyxUxohFzf4/exec"; // *** เปลี่ยน URL ตรงนี้ ***
-        const STORAGE = { QUESTIONS: 'app_v2_questions', DRAFT: 'app_v2_draft' };
+        const STORAGE = { QUESTIONS: 'app_v2_questions', DRAFT: 'app_v2_draft', USER: 'audit_user_session' };
         let currentUser = null;
         let branchData = {}; 
         let zoneList = [];
         let auditRecords = [];
         let currentAuditImages = {};
         let allBranchDetails = []; 
+        let inactivityTimer;
         
         const defaultQuestions = [
             { id: 'q1', title: 'ความสะอาดและความเรียบร้อยภายในร้าน', allowImage: true }, 
@@ -334,6 +371,61 @@
         ];
 
         let questions = JSON.parse(localStorage.getItem(STORAGE.QUESTIONS)) || defaultQuestions;
+
+        // Auto Logout Logic
+        function startInactivityTimer() {
+            resetTimer();
+            window.addEventListener('mousemove', resetTimer);
+            window.addEventListener('mousedown', resetTimer);
+            window.addEventListener('keypress', resetTimer);
+            window.addEventListener('touchmove', resetTimer);
+            window.addEventListener('scroll', resetTimer);
+        }
+
+        function resetTimer() {
+            clearTimeout(inactivityTimer);
+            if (currentUser) {
+                // Set timeout for 10 minutes (10 * 60 * 1000 ms)
+                inactivityTimer = setTimeout(() => {
+                    localStorage.removeItem(STORAGE.USER);
+                    Swal.fire({
+                        title: 'หมดเวลาการใช้งาน',
+                        text: 'ระบบออกจากระบบอัตโนมัติเนื่องจากไม่มีการใช้งานเกิน 10 นาที',
+                        icon: 'warning',
+                        confirmButtonText: 'ตกลง'
+                    }).then(() => {
+                        location.reload();
+                    });
+                }, 600000); 
+            }
+        }
+
+        // Restore Session on Load
+        window.addEventListener('load', () => {
+            const storedUser = localStorage.getItem(STORAGE.USER);
+            if(storedUser) {
+                currentUser = JSON.parse(storedUser);
+                initSystemAfterLogin();
+            }
+        });
+
+        function initSystemAfterLogin() {
+            document.getElementById('view-login').classList.add('hidden');
+            document.getElementById('main-layout').classList.remove('hidden');
+            document.getElementById('sidebarName').innerText = currentUser.name;
+            document.getElementById('sidebarRole').innerText = currentUser.role;
+            document.getElementById('sidebarAvatar').innerText = currentUser.name.charAt(0).toUpperCase();
+
+            if (currentUser.role !== 'admin') document.querySelectorAll('.admin-only').forEach(e => e.classList.add('hidden'));
+            else document.querySelectorAll('.admin-only').forEach(e => e.classList.remove('hidden'));
+
+            // Load data in background
+            fetchBranches(); 
+            fetchHistory(false); 
+            
+            switchView('view-dashboard');
+            startInactivityTimer();
+        }
 
         // Mobile Sidebar Toggle
         function toggleSidebar() {
@@ -354,17 +446,6 @@
                 const response = await fetch(API_URL, { method: 'POST', body: JSON.stringify({ action, ...payload }) });
                 return await response.json();
             } catch (error) { return { success: false, message: error.message }; }
-        }
-
-        async function debugSystem() {
-            toggleLoading(true, "กำลังตรวจสอบระบบ...");
-            const res = await callAPI('debug');
-            toggleLoading(false);
-            if(res.success) {
-                let msg = `Backend Version: ${res.version || 'Unknown'}\n`;
-                for(let k in res.data) msg += `${k}: ${res.data[k]}\n`;
-                Swal.fire({ title: 'สถานะระบบ', html: `<pre class="text-left text-xs bg-slate-100 p-2 rounded">${msg}</pre>`, icon: 'info' });
-            } else { showPopup('error', 'เชื่อมต่อไม่ได้', res.message); }
         }
 
         function switchView(viewId) {
@@ -394,25 +475,40 @@
             
             if (res.success) {
                 currentUser = res.user;
-                document.getElementById('view-login').classList.add('hidden');
-                document.getElementById('main-layout').classList.remove('hidden');
-                document.getElementById('sidebarName').innerText = currentUser.name;
-                document.getElementById('sidebarRole').innerText = currentUser.role;
-                document.getElementById('sidebarAvatar').innerText = currentUser.name.charAt(0).toUpperCase();
+                // Save Session
+                localStorage.setItem(STORAGE.USER, JSON.stringify(currentUser));
+                
+                initSystemAfterLogin();
 
-                if (currentUser.role !== 'admin') document.querySelectorAll('.admin-only').forEach(e => e.classList.add('hidden'));
-                else document.querySelectorAll('.admin-only').forEach(e => e.classList.remove('hidden'));
-
-                toggleLoading(true, "กำลังโหลดข้อมูล...");
-                await fetchBranches(); 
-                await fetchHistory(false); // โหลดประวัติไว้เบื้องหลังเพื่ออัปเดตตัวเลข
-                toggleLoading(false);
-
-                switchView('view-dashboard');
                 const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 3000, timerProgressBar: true });
                 Toast.fire({ icon: 'success', title: `ยินดีต้อนรับ, ${currentUser.name}` });
                 callAPI('logSystem', { user: currentUser.user, role: currentUser.role, logAction: 'LOGIN', details: 'Success' });
             } else { showPopup('error', 'เข้าสู่ระบบไม่สำเร็จ', res.message); }
+        }
+
+        // --- FIXED LOGOUT FUNCTION ---
+        function logout() {
+            Swal.fire({
+                title: 'ออกจากระบบ?',
+                text: "คุณต้องการออกจากระบบหรือไม่",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'ยืนยัน',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6'
+            }).then((res) => {
+                if (res.isConfirmed) {
+                    // 1. Clear Timer
+                    clearTimeout(inactivityTimer);
+                    // 2. Clear Storage (FIXED HERE)
+                    localStorage.removeItem(STORAGE.USER);
+                    // 3. Clear Variable
+                    currentUser = null;
+                    // 4. Reload
+                    location.reload();
+                }
+            });
         }
 
         async function fetchBranches() {
@@ -615,7 +711,6 @@
         // --- Export ---
         function downloadPDF() { const element = document.getElementById('detailContent'); const opt = { margin: 10, filename: 'audit-report.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }; html2pdf().set(opt).from(element).save(); }
         function printReport() { const content = document.getElementById('detailContent').innerHTML; const printArea = document.getElementById('print-area'); printArea.innerHTML = `<div class="p-8"><h1 class="text-2xl font-bold mb-4 text-center">รายงานการตรวจสอบมาตรฐานสาขา</h1>${content}</div>`; window.print(); }
-        function logout() { Swal.fire({ title: 'ออกจากระบบ?', showCancelButton: true, confirmButtonText: 'ยืนยัน', confirmButtonColor: '#d33' }).then((res) => { if(res.isConfirmed) { currentUser = null; location.reload(); } }); }
         
         // --- History ---
         async function fetchHistory(shouldRender = true) { 
@@ -672,9 +767,8 @@
             } 
         }
 
-        // ฟังก์ชันเปิด Modal แก้ไข (ล็อค Username)
         function openEditUser(user, name, role) {
-            document.getElementById('editUsername').value = user; // Set Value
+            document.getElementById('editUsername').value = user;
             document.getElementById('editName').value = name;
             document.getElementById('editRole').value = role;
             document.getElementById('editUserModal').classList.remove('hidden');
@@ -686,10 +780,10 @@
             toggleLoading(true, "กำลังบันทึกข้อมูล...");
             
             const res = await callAPI('editUser', {
-                user: formData.get('user'), // ReadOnly Value
+                user: formData.get('user'),
                 name: formData.get('name'),
                 role: formData.get('role'),
-                pass: formData.get('pass') // Optional
+                pass: formData.get('pass')
             });
 
             toggleLoading(false);
@@ -725,4 +819,3 @@
     </script>
 </body>
 </html>
-
