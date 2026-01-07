@@ -154,12 +154,13 @@
             </div>
             <div class="relative z-10 text-center text-white px-10">
                 <div class="mb-6 inline-block p-4 rounded-full bg-white/10 backdrop-blur-lg border border-white/20 shadow-2xl">
+                    <!-- 1. Revert to Green Icon -->
                     <i class="fa-solid fa-database text-6xl text-green-400"></i>
                 </div>
                 <h1 class="text-4xl font-display font-bold mb-4 tracking-wide">Audit System Pro</h1>
                 <p class="text-slate-300 text-lg max-w-md mx-auto leading-relaxed">ระบบบริหารจัดการมาตรฐานสาขา Enterprise Grade</p>
                 <div class="mt-8 flex justify-center gap-2">
-                    <span class="px-3 py-1 bg-white/10 rounded-full text-xs border border-white/20">v4.5 Enterprise</span>
+                    <span class="px-3 py-1 bg-white/10 rounded-full text-xs border border-white/20">v4.5.1 Enterprise</span>
                     <span class="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-xs border border-green-500/30">● Online</span>
                 </div>
             </div>
@@ -182,7 +183,7 @@
                     <button type="submit" class="w-full bg-primary hover:bg-blue-700 text-white font-bold py-3.5 rounded-lg shadow-lg transition transform active:scale-[0.98]">
                         เข้าสู่ระบบ
                     </button>
-                    <!-- Version below button & Credit -->
+                    <!-- 2. Version below button & Credit -->
                     <div class="text-center mt-4">
                         <div class="text-xs text-slate-400">Version 4.5.1 Enterprise</div>
                         <div class="text-[10px] text-slate-300 mt-1 font-bold">© 2026 ADMIN OK</div>
@@ -265,31 +266,119 @@
 
             <main id="mainContent" class="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 relative w-full bg-slate-50 pb-20">
                 
-                <!-- 1. Dashboard -->
-                <div id="view-dashboard" class="page-view fade-in space-y-6">
-                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-                        <div onclick="filterDashboard('all')" class="cursor-pointer bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center justify-between hover:shadow-md transition"><div><p class="text-sm font-medium text-slate-500">สาขาทั้งหมด</p><h3 id="dashTotalBranches" class="text-3xl font-bold text-slate-800 mt-1">0</h3></div><div class="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-xl shadow-sm"><i class="fa-solid fa-store"></i></div></div>
-                        <div onclick="filterDashboard('all')" class="cursor-pointer bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center justify-between hover:shadow-md transition"><div><p class="text-sm font-medium text-slate-500">ตรวจแล้ว</p><h3 id="dashAudited" class="text-3xl font-bold text-success mt-1">0</h3></div><div class="w-12 h-12 rounded-full bg-green-50 text-green-600 flex items-center justify-center text-xl shadow-sm"><i class="fa-solid fa-check-circle"></i></div></div>
-                        <div onclick="showRemainingBranches()" class="cursor-pointer bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center justify-between hover:shadow-md transition"><div><p class="text-sm font-medium text-slate-500">คงเหลือ</p><h3 id="dashRemaining" class="text-3xl font-bold text-warning mt-1">0</h3></div><div class="w-12 h-12 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center text-xl shadow-sm"><i class="fa-solid fa-hourglass-half"></i></div></div>
-                        <div onclick="filterDashboard('fail')" class="cursor-pointer bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-center justify-between hover:shadow-md transition"><div><p class="text-sm font-medium text-slate-500">ต้องแก้ไข</p><h3 id="dashFailCount" class="text-3xl font-bold text-danger mt-1">0</h3></div><div class="w-12 h-12 rounded-full bg-red-50 text-red-500 flex items-center justify-center text-xl shadow-sm"><i class="fa-solid fa-triangle-exclamation"></i></div></div>
-                    </div>
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm"><h3 class="font-bold text-slate-700 mb-4"><i class="fa-solid fa-chart-line text-primary mr-2"></i> แนวโน้มผลการตรวจ</h3><canvas id="trendChart" class="w-full max-h-64"></canvas></div>
-                        <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm"><h3 class="font-bold text-slate-700 mb-4"><i class="fa-solid fa-triangle-exclamation text-red-500 mr-2"></i> หัวข้อที่ตกบ่อย</h3><canvas id="failChart" class="w-full max-h-64"></canvas></div>
-                    </div>
-                    <!-- Zone Status List -->
-                    <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm overflow-hidden">
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="font-bold text-slate-700 flex items-center gap-2"><i class="fa-solid fa-map-location-dot text-primary"></i> สถานะสาขาแยกตามเขต</h3>
+                <!-- 1. Dashboard (Enhanced UI) -->
+                <div id="view-dashboard" class="page-view fade-in space-y-8">
+                    
+                    <!-- Welcome Banner -->
+                    <div class="bg-gradient-to-r from-indigo-600 to-blue-500 rounded-2xl p-8 text-white shadow-lg relative overflow-hidden group">
+                        <div class="relative z-10">
+                            <h2 class="text-3xl font-bold font-display mb-2">สวัสดี, <span id="dashWelcomeName">User</span> 👋</h2>
+                            <p class="opacity-90 text-lg font-light">ยินดีต้อนรับสู่แดชบอร์ดภาพรวมระบบตรวจสอบมาตรฐานสาขา</p>
                         </div>
-                        <div id="zoneStatList" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 text-sm">
-                            <div class="col-span-full text-center py-4 text-slate-400">กำลังโหลดข้อมูล...</div>
+                        <i class="fa-solid fa-chart-line absolute -bottom-6 -right-6 text-white opacity-10 text-9xl transform -rotate-12 group-hover:scale-110 transition-transform duration-700"></i>
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+                    </div>
+
+                    <!-- Stats Cards (Colorful) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <!-- Card 1: Total -->
+                        <div onclick="filterDashboard('all')" class="relative overflow-hidden bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-lg transition-all cursor-pointer group">
+                            <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+                            <div class="flex items-center justify-between relative z-10">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-500">สาขาทั้งหมด</p>
+                                    <h3 id="dashTotalBranches" class="text-4xl font-display font-bold text-slate-800 mt-2">0</h3>
+                                </div>
+                                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-400 text-white flex items-center justify-center text-2xl shadow-lg shadow-blue-200 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                                    <i class="fa-solid fa-store"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Audited -->
+                        <div onclick="filterDashboard('all')" class="relative overflow-hidden bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-lg transition-all cursor-pointer group">
+                            <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-gradient-to-br from-emerald-500/20 to-green-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+                            <div class="flex items-center justify-between relative z-10">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-500">ตรวจแล้ว</p>
+                                    <h3 id="dashAudited" class="text-4xl font-display font-bold text-emerald-600 mt-2">0</h3>
+                                </div>
+                                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-green-400 text-white flex items-center justify-center text-2xl shadow-lg shadow-emerald-200 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                                    <i class="fa-solid fa-clipboard-check"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: Remaining -->
+                        <div onclick="showRemainingBranches()" class="relative overflow-hidden bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-lg transition-all cursor-pointer group">
+                            <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-gradient-to-br from-orange-500/20 to-amber-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+                            <div class="flex items-center justify-between relative z-10">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-500">คงเหลือ</p>
+                                    <h3 id="dashRemaining" class="text-4xl font-display font-bold text-orange-500 mt-2">0</h3>
+                                </div>
+                                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-400 text-white flex items-center justify-center text-2xl shadow-lg shadow-orange-200 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                                    <i class="fa-solid fa-hourglass-half"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 4: Fail -->
+                        <div onclick="filterDashboard('fail')" class="relative overflow-hidden bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:shadow-lg transition-all cursor-pointer group">
+                            <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-gradient-to-br from-rose-500/20 to-red-500/20 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-500"></div>
+                            <div class="flex items-center justify-between relative z-10">
+                                <div>
+                                    <p class="text-sm font-medium text-slate-500">ต้องแก้ไข</p>
+                                    <h3 id="dashFailCount" class="text-4xl font-display font-bold text-rose-600 mt-2">0</h3>
+                                </div>
+                                <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-500 to-red-400 text-white flex items-center justify-center text-2xl shadow-lg shadow-rose-200 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Section -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition-shadow">
+                            <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center"><i class="fa-solid fa-chart-pie"></i></div>
+                                <h3 class="font-bold text-slate-700">แนวโน้มผลการตรวจ</h3>
+                            </div>
+                            <div class="p-6">
+                                <canvas id="trendChart" class="w-full max-h-64"></canvas>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition-shadow">
+                            <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center"><i class="fa-solid fa-chart-column"></i></div>
+                                <h3 class="font-bold text-slate-700">หัวข้อที่ตกบ่อย</h3>
+                            </div>
+                            <div class="p-6">
+                                <canvas id="failChart" class="w-full max-h-64"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Zone Status List -->
+                    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                        <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+                            <h3 class="font-bold text-slate-800 flex items-center gap-2 text-lg">
+                                <i class="fa-solid fa-map-location-dot text-primary"></i> สถานะสาขาแยกตามเขต
+                            </h3>
+                        </div>
+                        <div class="p-6">
+                            <div id="zoneStatList" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4 text-sm">
+                                <div class="col-span-full text-center py-4 text-slate-400">กำลังโหลดข้อมูล...</div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- 2. Audit Form (Professional Layout) -->
                 <div id="view-audit" class="page-view fade-in hidden max-w-5xl mx-auto pb-20">
+                    
+                    <!-- Draft Notice -->
                     <div id="draftNotice" class="hidden mb-6 bg-amber-50 border border-amber-200 rounded-lg p-4 flex justify-between items-center shadow-sm">
                         <div class="flex items-center gap-3 text-amber-800">
                             <i class="fa-solid fa-clock-rotate-left text-xl"></i>
@@ -313,7 +402,7 @@
                     </div>
                     
                     <form id="auditForm" onsubmit="submitAudit(event)" oninput="saveDraft()">
-                        <!-- ... (Form content remains the same) ... -->
+                        
                         <!-- 1. ข้อมูลสาขา -->
                         <div class="card">
                             <div class="card-header border-l-4 border-blue-500">
@@ -369,6 +458,42 @@
                                         <input type="text" id="f_percent" class="input-box bg-green-50 text-green-700 font-bold text-center" readonly placeholder="0%">
                                     </div>
                                 </div>
+
+                                <!-- NEW: Financial Metrics Row 1 -->
+                                <div class="mt-4 border-t border-slate-100 pt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    <div class="input-group">
+                                        <label class="input-label">OD1 %</label>
+                                        <input type="text" id="f_od1" class="input-box" placeholder="%">
+                                    </div>
+                                    <div class="input-group">
+                                        <label class="input-label">OD2 %</label>
+                                        <input type="text" id="f_od2" class="input-box" placeholder="%">
+                                    </div>
+                                    <div class="input-group">
+                                        <label class="input-label">OD3 %</label>
+                                        <input type="text" id="f_od3" class="input-box" placeholder="%">
+                                    </div>
+                                    <div class="input-group">
+                                        <label class="input-label">NPL %</label>
+                                        <input type="text" id="f_npl_percent" class="input-box font-bold text-red-600" placeholder="%">
+                                    </div>
+                                </div>
+
+                                <!-- NEW: Financial Metrics Row 2 (Currency & Calculation) -->
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-2">
+                                    <div class="input-group">
+                                        <label class="input-label">AR (บาท)</label>
+                                        <input type="text" id="f_ar" oninput="calculateDebt()" onblur="formatInputCurrency(this)" class="input-box" placeholder="0.00">
+                                    </div>
+                                    <div class="input-group">
+                                        <label class="input-label">NET AR (บาท)</label>
+                                        <input type="text" id="f_net_ar" oninput="calculateDebt()" onblur="formatInputCurrency(this)" class="input-box" placeholder="0.00">
+                                    </div>
+                                    <div class="input-group">
+                                        <label class="input-label">NPL (บาท) <span class="text-xs font-normal text-slate-400">(AR - NET AR)</span></label>
+                                        <input type="text" id="f_npl_baht" class="input-box bg-slate-100 font-bold text-red-600" readonly placeholder="0.00">
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -379,9 +504,20 @@
                                 <h3 class="card-title">การประเมินพนักงาน (Employee)</h3>
                             </div>
                             <div class="card-body">
-                                <div class="input-group mb-6">
-                                    <label class="input-label">ชื่อพนักงานที่รับการตรวจ</label>
-                                    <input type="text" id="emp_name" class="input-box text-lg" placeholder="ระบุชื่อ-นามสกุล">
+                                <!-- UPDATED: Employee Info (ID, First, Last) -->
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                    <div class="input-group">
+                                        <label class="input-label">รหัสพนักงาน</label>
+                                        <input type="text" id="emp_id" class="input-box text-lg text-center font-mono" placeholder="รหัสพนักงาน">
+                                    </div>
+                                    <div class="input-group">
+                                        <label class="input-label">ชื่อ (First Name)</label>
+                                        <input type="text" id="emp_firstname" class="input-box text-lg" placeholder="ระบุชื่อจริง">
+                                    </div>
+                                    <div class="input-group">
+                                        <label class="input-label">นามสกุล (Last Name)</label>
+                                        <input type="text" id="emp_lastname" class="input-box text-lg" placeholder="ระบุนามสกุล">
+                                    </div>
                                 </div>
 
                                 <div class="rating-table-container mb-6">
@@ -596,12 +732,23 @@
                 <!-- 4. Questions Config View -->
                 <div id="view-questions" class="page-view fade-in hidden max-w-4xl mx-auto">
                     <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-4 sm:p-6">
-                        <div class="flex justify-between items-center mb-6"><h3 class="font-bold text-slate-800 text-lg flex items-center gap-2"><i class="fa-solid fa-list-check text-pink-500"></i> รายการคำถาม (จาก Google Sheets)</h3><button onclick="fetchQuestionsFromAPI()" class="text-xs text-primary hover:underline"><i class="fa-solid fa-sync"></i> Reload</button></div>
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2"><i class="fa-solid fa-list-check text-pink-500"></i> รายการคำถาม (จาก Google Sheets)</h3>
+                            <div class="flex items-center gap-3">
+                                <!-- UPDATED: Add Question Button -->
+                                <button onclick="openAddQuestionModal()" class="flex items-center gap-2 bg-primary hover:bg-blue-700 text-white text-sm font-bold px-4 py-2 rounded-lg transition shadow-sm">
+                                    <i class="fa-solid fa-plus"></i> เพิ่มคำถาม
+                                </button>
+                                <button onclick="fetchQuestionsFromAPI()" class="text-slate-400 hover:text-primary transition p-2">
+                                    <i class="fa-solid fa-rotate"></i>
+                                </button>
+                            </div>
+                        </div>
                         <div class="p-4 rounded-lg border border-blue-100 bg-blue-50 text-blue-800 text-sm mb-6 flex gap-3 items-center">
                             <i class="fa-solid fa-circle-info text-xl"></i>
                             <div>
-                                <span class="font-bold">Admin Notice:</span> กรุณาจัดการ เพิ่ม/ลบ หัวข้อคำถามโดยตรงที่ไฟล์ Google Sheets (Sheet: 'Questions')<br>
-                                <span class="text-xs opacity-75">คอลัมน์: ID, Title, AllowImage (TRUE/FALSE), Active</span>
+                                <span class="font-bold">Admin Notice:</span> รายการคำถามถูกดึงมาจาก Google Sheets สามารถ เพิ่ม/ลบ/แก้ไข ได้ทันที<br>
+                                <span class="text-xs opacity-75">การเปลี่ยนแปลงจะมีผลกับผู้ใช้งานทุกคนหลังจากรีเฟรช</span>
                             </div>
                         </div>
                         <div id="questionsListConfig" class="space-y-3"></div>
@@ -730,7 +877,7 @@
 
     <script>
         // *** REPLACE WITH YOUR REAL DEPLOYED WEB APP URL HERE ***
-        const API_URL = "https://script.google.com/macros/s/AKfycbwQ3PAtmKc46CNCwKGYrMsULKja6P08LFh_b96w37L0CUCs9YSwMei6iiyxUxohFzf4/exec"; 
+        const API_URL = "https://script.google.com/macros/s/AKfycbxyv8_yBg_nPA_1ncgctxHDFlni-W6N0aY9lpQwuvGpWiFjjw4oiH3D8T6FRadr2Bo4/exec"; 
         
         const STORAGE = { QUESTIONS: 'app_v2_questions', DRAFT: 'app_v2_draft', USER: 'audit_user_session' };
         let currentUser = null;
@@ -766,6 +913,10 @@
             document.getElementById('sidebarRole').innerText = currentUser.role;
             document.getElementById('sidebarAvatar').innerText = currentUser.name.charAt(0).toUpperCase();
 
+            // Set Welcome Name in Dashboard
+            const welcomeName = document.getElementById('dashWelcomeName');
+            if(welcomeName) welcomeName.innerText = currentUser.name;
+
             if (currentUser.role !== 'admin') document.querySelectorAll('.admin-only').forEach(e => e.classList.add('hidden'));
             else document.querySelectorAll('.admin-only').forEach(e => e.classList.remove('hidden'));
 
@@ -787,6 +938,28 @@
         function toggleLoading(show, text = "") { 
             const overlay = document.getElementById('loadingOverlay'); 
             if(show) overlay.classList.remove('hidden'); else overlay.classList.add('hidden'); 
+        }
+        
+        // --- NEW: View Image in Full Size ---
+        function viewImage(url) {
+            if (!url) return;
+            // Extract the big image URL if it's a thumbnail link
+            let bigUrl = url;
+            if(url.includes("drive.google.com") && url.includes("id=")) {
+                const idMatch = url.match(/id=([^&]+)/);
+                if(idMatch) bigUrl = `https://drive.google.com/uc?export=view&id=${idMatch[1]}`;
+            }
+            
+            Swal.fire({
+                imageUrl: bigUrl,
+                imageAlt: 'Full Size Image',
+                width: '90%',
+                padding: '1em',
+                background: '#fff',
+                showConfirmButton: false,
+                showCloseButton: true,
+                customClass: { image: 'rounded-lg shadow-lg' }
+            });
         }
 
         async function callAPI(action, payload = {}) {
@@ -920,10 +1093,16 @@
                 const zoneContainer = document.getElementById('zoneStatList');
                 if(zoneContainer) {
                     zoneContainer.innerHTML = zoneList.map(z => 
-                        `<div class="bg-white p-4 rounded-lg border border-slate-100 text-center shadow-sm hover:shadow-md transition cursor-default group">
-                            <div class="text-xs text-slate-400 mb-1 group-hover:text-primary transition">เขต</div>
-                            <div class="font-bold text-slate-700 text-lg group-hover:scale-110 transition">${z}</div>
-                            <div class="text-xs text-slate-500 mt-1 bg-slate-50 rounded py-1 border border-slate-100">${branchData[z].length} สาขา</div>
+                        `<div class="bg-white p-4 rounded-xl border border-slate-100 flex items-center justify-between shadow-sm hover:shadow-md transition cursor-default group overflow-hidden relative">
+                            <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-blue-400 to-indigo-500"></div>
+                            <div class="pl-2">
+                                <div class="text-xs text-slate-400 mb-0.5 group-hover:text-primary transition font-bold uppercase tracking-wider">Zone</div>
+                                <div class="font-bold text-slate-700 text-lg group-hover:scale-105 transition origin-left">${z}</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs text-slate-400">สาขา</div>
+                                <span class="font-bold text-lg text-primary">${branchData[z].length}</span>
+                            </div>
                         </div>`
                     ).join('');
                 }
@@ -967,6 +1146,23 @@
                             ${q.allowImage ? `<label for="file_${q.id}" class="cursor-pointer flex items-center justify-center gap-2 bg-white border border-slate-300 text-slate-500 hover:text-blue-600 hover:border-blue-600 px-4 py-2 rounded-lg transition shadow-sm w-full md:w-auto h-[42px]"><i class="fa-solid fa-camera"></i> <span class="text-sm font-bold">รูป</span> <span id="file_status_${q.id}" class="text-xs"></span></label><input type="file" id="file_${q.id}" accept="image/*" class="hidden" onchange="handleImageSelect(this, '${q.id}')">` : ''}
                         </div>
                     </div>`).join('');
+            }
+        }
+
+        // --- NEW: Calculate Debt NPL ---
+        function calculateDebt() {
+            const ar = parseFloat(document.getElementById('f_ar').value.replace(/,/g, '')) || 0;
+            const netAr = parseFloat(document.getElementById('f_net_ar').value.replace(/,/g, '')) || 0;
+            const npl = ar - netAr;
+            document.getElementById('f_npl_baht').value = npl.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            saveDraft();
+        }
+        
+        // --- NEW: Format on Blur ---
+        function formatInputCurrency(el) {
+            let val = parseFloat(el.value.replace(/,/g, ''));
+            if(!isNaN(val)) {
+                el.value = val.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
             }
         }
 
@@ -1060,14 +1256,17 @@
             const rawData = collectFormData();
             const details = [];
             const fieldMap = { 
-                'f_site': 'ไซต์', 'f_target': 'เป้าหมาย', 'f_actual': 'ยอดทำได้', 'f_percent': '% เทียบเป้า', 'emp_name': 'พนักงาน',
+                'f_site': 'ไซต์', 'f_target': 'เป้าหมาย', 'f_actual': 'ยอดทำได้', 'f_percent': '% เทียบเป้า', 
+                'f_od1': 'OD1 %', 'f_od2': 'OD2 %', 'f_od3': 'OD3 %', 'f_npl_percent': 'NPL %',
+                'f_ar': 'AR', 'f_net_ar': 'NET AR', 'f_npl_baht': 'NPL (บาท)',
+                'emp_id': 'รหัสพนักงาน', 'emp_firstname': 'ชื่อ', 'emp_lastname': 'นามสกุล',
                 'rate_person': 'บุคลิกภาพ', 'rate_sale': 'การขาย', 'rate_k_m': 'สินค้าM', 'rate_k_ctv': 'สินค้าCTV', 'rate_k_hl': 'สินค้าHL', 'rate_k_promo': 'โปรโมชั่น', 
                 'rate_c_branch':'ความสะอาดหน้าสาขา', 'rate_c_desk':'โต๊ะทำงาน', 'rate_c_coffee':'จุดน้ำดื่ม', 'rate_c_toilet':'ห้องน้ำ', 'rate_c_storage':'ที่เก็บของ', 'rate_c_back':'หลังสาขา' 
             }; 
             
             for (const key in rawData) {
                 if (questions.some(q => q.id === key) || key.startsWith('note_') || key === 'zoneSelect' || key === 'branchSelect' || key === 'summaryComment' || key === 'gpsCoords') continue;
-                if(key.startsWith('rate_') || key.startsWith('f_') || key === 'emp_name' || key === 'area_comment') {
+                if(key.startsWith('rate_') || key.startsWith('f_') || key.startsWith('emp_') || key === 'area_comment') {
                     details.push({ q: fieldMap[key] || key, res: rawData[key], note: '' });
                 }
             }
@@ -1123,21 +1322,23 @@
             const list = document.getElementById('questionsListConfig');
             if(!questions || questions.length === 0) { list.innerHTML = `<tr><td colspan="3" class="text-center py-4">No Questions</td></tr>`; return; }
             list.innerHTML = questions.map(q => `
-            <tr class="hover:bg-slate-50 transition">
-                <td class="p-3">
-                    <div class="font-bold text-slate-700">${q.title}</div>
-                    <div class="text-xs text-slate-400 font-mono">${q.id}</div>
-                </td>
-                <td class="p-3 text-center">
-                    ${q.allowImage ? '<span class="text-green-600 bg-green-50 px-2 py-1 rounded text-xs font-bold"><i class="fa-solid fa-camera"></i> รองรับ</span>' : '<span class="text-slate-400 text-xs">-</span>'}
-                </td>
-                <td class="p-3 text-center">
-                    <div class="flex justify-center gap-2">
-                        <button onclick="openAddQuestionModal('${q.id}', '${q.title}', ${q.allowImage})" class="w-8 h-8 rounded bg-blue-50 text-blue-600 hover:bg-blue-100 transition"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="deleteQuestion('${q.id}')" class="w-8 h-8 rounded bg-red-50 text-red-600 hover:bg-red-100 transition"><i class="fa-solid fa-trash"></i></button>
+            <div class="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-lg hover:shadow-md transition group">
+                <div class="flex-1">
+                    <div class="font-bold text-slate-700 text-lg">${q.title}</div>
+                    <div class="text-xs text-slate-400 font-mono mt-1 flex items-center gap-2">
+                        <span>ID: ${q.id}</span>
+                        ${q.allowImage ? '<span class="text-green-600 bg-green-50 px-2 py-0.5 rounded text-[10px] font-bold border border-green-100"><i class="fa-solid fa-camera mr-1"></i>รูปภาพ</span>' : ''}
                     </div>
-                </td>
-            </tr>`).join(''); 
+                </div>
+                <div class="flex gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                    <button onclick="openAddQuestionModal('${q.id}', '${q.title}', ${q.allowImage})" class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition flex items-center justify-center shadow-sm" title="แก้ไข">
+                        <i class="fa-solid fa-pen"></i>
+                    </button>
+                    <button onclick="deleteQuestion('${q.id}')" class="w-10 h-10 rounded-lg bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition flex items-center justify-center shadow-sm" title="ลบ">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            </div>`).join(''); 
         }
 
         // --- Others (History, Users, Analytics, PDF) ---
@@ -1154,6 +1355,18 @@
         
         // --- NEW: Professional Report Generator ---
         function getVal(arr, key) { const f = arr.find(x => x.q === key); return f ? f.res : '-'; }
+        
+        function fixDriveUrl(url) {
+            if (!url) return "";
+            if (url.includes("drive.google.com") && url.includes("id=")) {
+                const idMatch = url.match(/id=([^&]+)/);
+                if (idMatch) {
+                    return `https://drive.google.com/thumbnail?id=${idMatch[1]}&sz=w1000`;
+                }
+            }
+            return url;
+        }
+
         function genReportTable(title, items, details) {
             let html = `<h4 class="font-bold text-slate-700 mb-2 mt-4 text-sm border-b pb-1">${title}</h4>
             <table class="w-full text-xs border-collapse border border-slate-300"><thead><tr class="bg-slate-100"><th class="border border-slate-300 p-2 text-left w-1/3">หัวข้อ</th><th class="border border-slate-300 p-1 w-10">1</th><th class="border border-slate-300 p-1 w-10">2</th><th class="border border-slate-300 p-1 w-10">3</th><th class="border border-slate-300 p-1 w-10">4</th><th class="border border-slate-300 p-1 w-10">5</th></tr></thead><tbody>`;
@@ -1161,7 +1374,8 @@
                 const val = getVal(details, item.key);
                 html += `<tr><td class="border border-slate-300 p-2">${item.label}</td>`;
                 for(let i=1; i<=5; i++) {
-                    html += `<td class="border border-slate-300 p-1 text-center font-bold text-slate-600">${val == i ? '●' : ''}</td>`;
+                    // Changed bullet to checkmark
+                    html += `<td class="border border-slate-300 p-1 text-center font-bold text-green-600 text-lg">${val == i ? '✓' : ''}</td>`;
                 }
                 html += `</tr>`;
             });
@@ -1186,11 +1400,14 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4 mb-6 text-sm bg-slate-50 p-4 rounded border border-slate-200">
-                    <div><strong>พนักงาน:</strong> ${getVal(rec.details, 'พนักงาน')}</div>
+                <div class="grid grid-cols-4 gap-4 mb-6 text-sm bg-slate-50 p-4 rounded border border-slate-200">
+                    <div><strong>พนักงาน:</strong> ${getVal(rec.details, 'ชื่อ')} ${getVal(rec.details, 'นามสกุล')} (${getVal(rec.details, 'รหัสพนักงาน')})</div>
                     <div><strong>ไซต์:</strong> ${getVal(rec.details, 'ไซต์')}</div>
-                    <div><strong>เป้าหมาย:</strong> ${getVal(rec.details, 'เป้าหมาย')}</div>
-                    <div><strong>ยอดทำได้:</strong> ${getVal(rec.details, 'ยอดทำได้')} (${getVal(rec.details, '% เทียบเป้า')})</div>
+                    <div><strong>เป้า:</strong> ${getVal(rec.details, 'เป้าหมาย')}</div>
+                    <div><strong>ทำได้:</strong> ${getVal(rec.details, 'ยอดทำได้')} (${getVal(rec.details, '% เทียบเป้า')})</div>
+                    <div><strong>OD1:</strong> ${getVal(rec.details, 'OD1 %')}</div>
+                    <div><strong>NPL%:</strong> ${getVal(rec.details, 'NPL %')}</div>
+                    <div class="col-span-2"><strong>NPL(บาท):</strong> ${getVal(rec.details, 'NPL (บาท)')}</div>
                 </div>
             `;
 
@@ -1208,7 +1425,7 @@
             content += `<div class="space-y-2">`;
             rec.details.forEach(d => {
                 // Filter out non-checklist items
-                if(['พนักงาน','ไซต์','เป้าหมาย','ยอดทำได้','% เทียบเป้า','area_comment'].includes(d.q) || ['1','2','3','4','5'].includes(d.res)) return;
+                if(['พนักงาน','ไซต์','เป้าหมาย','ยอดทำได้','% เทียบเป้า','area_comment', 'รหัสพนักงาน', 'ชื่อ', 'นามสกุล', 'OD1 %', 'OD2 %', 'OD3 %', 'NPL %', 'AR', 'NET AR', 'NPL (บาท)'].includes(d.q) || ['1','2','3','4','5'].includes(d.res)) return;
                 
                 content += `
                 <div class="flex items-start gap-3 text-sm border-b border-slate-100 pb-2 last:border-0">
@@ -1216,13 +1433,20 @@
                     <div class="flex-1">
                         <div class="font-semibold text-slate-700">${d.q}</div>
                         ${d.note ? `<div class="text-xs text-slate-500">${d.note}</div>` : ''}
-                        ${d.image ? `<div class="mt-1"><img src="${d.image}" referrerpolicy="no-referrer" class="h-20 rounded border border-slate-200"></div>` : ''}
+                        ${d.image ? `<div class="mt-1"><img src="${fixDriveUrl(d.image)}" onclick="viewImage(this.src)" class="h-20 rounded border border-slate-200 cursor-pointer hover:opacity-80 transition" referrerpolicy="no-referrer"></div>` : ''}
                     </div>
                 </div>`;
             });
             content += `</div>`;
 
             // Summary & Sign
+            // Use fixDriveUrl for signature too, just in case
+            let sigUrl = rec.signature;
+            // Check if signature is base64 (older records) or drive url (newer)
+            if(sigUrl && sigUrl.includes("drive.google.com")) {
+                 sigUrl = fixDriveUrl(sigUrl);
+            }
+
             content += `
                 <div class="mt-8 grid grid-cols-2 gap-6">
                     <div class="border p-3 rounded bg-white">
@@ -1231,7 +1455,7 @@
                     </div>
                     <div class="border p-3 rounded bg-white text-center">
                         <h5 class="font-bold text-xs text-slate-500 uppercase mb-2">ลงชื่อผู้ตรวจ</h5>
-                        ${rec.signature ? `<img src="${rec.signature}" class="h-16 mx-auto" referrerpolicy="no-referrer">` : '<div class="h-16"></div>'}
+                        ${sigUrl ? `<img src="${sigUrl}" onclick="viewImage(this.src)" class="h-16 mx-auto cursor-pointer hover:opacity-80 transition" referrerpolicy="no-referrer">` : '<div class="h-16"></div>'}
                         <div class="text-xs text-slate-400 mt-1">${rec.auditor}</div>
                     </div>
                 </div>
@@ -1239,6 +1463,34 @@
 
             document.getElementById('detailContent').innerHTML = content;
             document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        // --- NEW: Wait for Images before PDF ---
+        function preloadImages(element) {
+            return new Promise((resolve) => {
+                const images = Array.from(element.querySelectorAll('img'));
+                if (images.length === 0) {
+                    resolve();
+                    return;
+                }
+
+                let loadedCount = 0;
+                const checkDone = () => {
+                    loadedCount++;
+                    if (loadedCount === images.length) resolve();
+                };
+
+                images.forEach(img => {
+                    if (img.complete) {
+                        checkDone();
+                    } else {
+                        img.onload = checkDone;
+                        img.onerror = checkDone; // Proceed even if error
+                    }
+                });
+                // Fallback timeout
+                setTimeout(resolve, 3000); 
+            });
         }
         
         async function deleteAudit(id) {
@@ -1327,7 +1579,10 @@
                     <style>
                         body { font-family: 'Sarabun', sans-serif; padding: 20px; }
                         table { width: 100%; border-collapse: collapse; }
-                        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+                        /* Removed text-align: left from global th/td to allow classes or defaults to work */
+                        th, td { border: 1px solid #ccc; padding: 8px; } 
+                        /* Explicitly center headers as requested */
+                        th { text-align: center; background-color: #f3f4f6; } 
                         img { max-height: 100px; }
                     </style>
                 </head>
@@ -1371,6 +1626,120 @@
                 btn.innerHTML = originalText;
                 btn.disabled = false;
                 Swal.fire('PDF Error', 'ไม่สามารถสร้าง PDF ได้เนื่องจากรูปภาพติดสิทธิ์ (CORS) หรือปัญหาเครือข่าย ลองใช้ปุ่ม "พิมพ์รายงาน" แล้วเลือก "Save as PDF"', 'warning');
+            });
+        }
+
+        // --- NEW: Dashboard Analytics & Actions ---
+        let trendChartInstance = null;
+        let failChartInstance = null;
+
+        function fetchAnalytics() {
+            updateDashboardCounts();
+            
+            // Generate Charts
+            if(auditRecords.length === 0) return;
+
+            // 1. Trend Chart (Pass vs Fail Ratio)
+            const passCount = auditRecords.filter(r => r.result === 'ผ่าน').length;
+            const failCount = auditRecords.filter(r => r.result === 'ไม่ผ่าน').length;
+            
+            const ctxTrend = document.getElementById('trendChart').getContext('2d');
+            if (trendChartInstance) trendChartInstance.destroy();
+            trendChartInstance = new Chart(ctxTrend, {
+                type: 'doughnut',
+                data: {
+                    labels: ['ผ่าน (Pass)', 'ไม่ผ่าน (Fail)'],
+                    datasets: [{
+                        data: [passCount, failCount],
+                        backgroundColor: ['#22c55e', '#ef4444'],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { boxWidth: 12, font: { family: "'Sarabun', sans-serif" } } }
+                    }
+                }
+            });
+
+            // 2. Fail Chart (Top 5 Failed Topics)
+            const failCounts = {};
+            auditRecords.forEach(r => {
+                if(r.details) {
+                    r.details.forEach(d => {
+                        if(d.res === 'ไม่ผ่าน') {
+                            failCounts[d.q] = (failCounts[d.q] || 0) + 1;
+                        }
+                    });
+                }
+            });
+            
+            const sortedFail = Object.entries(failCounts).sort((a,b) => b[1] - a[1]).slice(0, 5);
+            const ctxFail = document.getElementById('failChart').getContext('2d');
+            if (failChartInstance) failChartInstance.destroy();
+            
+            failChartInstance = new Chart(ctxFail, {
+                type: 'bar',
+                data: {
+                    labels: sortedFail.map(x => x[0]),
+                    datasets: [{
+                        label: 'จำนวนครั้ง',
+                        data: sortedFail.map(x => x[1]),
+                        backgroundColor: '#ef4444',
+                        borderRadius: 4,
+                        barThickness: 20
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: { legend: { display: false } },
+                    scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } }, y: { ticks: { font: { family: "'Sarabun', sans-serif" } } } }
+                }
+            });
+        }
+
+        function filterDashboard(type) {
+            if(!auditRecords) return;
+            switchView('view-history');
+            
+            let filtered = auditRecords;
+            let title = "ประวัติการตรวจ (ทั้งหมด)";
+            
+            if(type === 'fail') {
+                filtered = auditRecords.filter(r => r.result === 'ไม่ผ่าน');
+                title = "ประวัติการตรวจ (ต้องแก้ไข)";
+            }
+            
+            renderHistoryTable(filtered);
+            // Update title to indicate filter
+            const header = document.querySelector('#view-history h3');
+            if(header) header.innerText = title;
+        }
+
+        function showRemainingBranches() {
+            if(!allBranchDetails.length) return;
+            // It's safer to match by Name since IDs might be "-"
+            
+            const remaining = allBranchDetails.filter(b => {
+                // Check if this branch name exists in auditRecords
+                // auditRecords stores 'branch' which is "Name" or "[ID] Name"
+                // Let's assume strict match or contains
+                return !auditRecords.some(r => r.branch.includes(b.name));
+            });
+            
+            const listHtml = remaining.length > 0 
+                ? remaining.map(b => `<div class="flex justify-between p-2 border-b text-sm"><span>${b.name}</span><span class="text-xs bg-slate-100 px-2 py-1 rounded text-slate-500">${b.zone}</span></div>`).join('')
+                : '<div class="text-center p-4 text-green-500 font-bold">ตรวจครบทุกสาขาแล้ว!</div>';
+
+            Swal.fire({
+                title: `สาขาที่คงเหลือ (${remaining.length})`,
+                html: `<div class="max-h-[60vh] overflow-y-auto text-left">${listHtml}</div>`,
+                confirmButtonText: 'ปิดหน้าต่าง'
             });
         }
     </script>
